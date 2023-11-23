@@ -1,0 +1,9 @@
+.{
+    .name = "w4",
+    .version = "0.0.1",
+    .paths = .{
+        "src/wasm4.zig",
+        "build.zig",
+        "build.zig.zon",
+    },
+}
