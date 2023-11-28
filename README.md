@@ -16,7 +16,7 @@ You can have `zig build` retrieve the `w4` module if you specify it as a depende
     .paths = .{""},
     .dependencies = .{
         .w4 = .{
-            .url = "https://github.com/peterhellberg/w4/archive/refs/tags/v0.0.1.tar.gz",
+            .url = "https://github.com/peterhellberg/w4/archive/refs/tags/v0.0.2.tar.gz",
         },
     },
 }
