@@ -81,6 +81,16 @@ pub extern fn vline(x: i32, y: i32, len: u32) void;
 /// Draws a horizontal line
 pub extern fn hline(x: i32, y: i32, len: u32) void;
 
+/// Draw a circle, with center at given x and y
+pub fn circle(x: i32, y: i32, r: u32) void {
+    oval(
+        x - @as(i32, @intCast(r)),
+        y - @as(i32, @intCast(r)),
+        r * 2,
+        r * 2,
+    );
+}
+
 /// Draws a single pixel
 pub fn pixel(x: i32, y: i32) void {
     if (x < 0 or x > SCREEN_SIZE or y < 0 or y > SCREEN_SIZE) {
