@@ -111,6 +111,11 @@ pub fn clear(c: u8) void {
     }
 }
 
+/// Set the color to use
+pub fn color(c: u16) void {
+    DRAW_COLORS.* = c;
+}
+
 // ┌───────────────────────────────────────────────────────────────────────────┐
 // │                                                                           │
 // │ Sound Functions                                                           │
