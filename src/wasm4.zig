@@ -164,3 +164,49 @@ extern fn traceUtf8(strPtr: [*]const u8, strLen: usize) void;
 /// See https://github.com/aduros/wasm4/issues/244 for discussion and type-safe
 /// alternatives.
 pub extern fn tracef(x: [*:0]const u8, ...) void;
+
+// ┌───────────────────────────────────────────────────────────────────────────┐
+// │                                                                           │
+// │ Higher Level API                                                          │
+// │                                                                           │
+// └───────────────────────────────────────────────────────────────────────────┘
+
+pub const MouseData = struct {
+    x: i16 = 0,
+    y: i16 = 0,
+    b: u8 = 0,
+};
+
+pub const Mouse = struct {
+    x: i32 = 0,
+    y: i32 = 0,
+
+    data: MouseData = .{},
+    prev: MouseData = .{},
+
+    pub fn update(self: *Mouse) void {
+        self.prev = self.data;
+
+        self.data.x = MOUSE_X.*;
+        self.data.y = MOUSE_Y.*;
+        self.data.b = MOUSE_BUTTONS.*;
+
+        if (self.data.x >= 0 and self.data.x <= SCREEN_SIZE)
+            self.x = @as(i32, @intCast(self.data.x));
+
+        if (self.data.y >= 0 and self.data.y <= SCREEN_SIZE)
+            self.y = @as(i32, @intCast(self.data.y));
+    }
+
+    pub fn pressed(self: *Mouse, btn: u8) bool {
+        return (self.data.b & btn != 0) and !(self.prev.b & btn != 0);
+    }
+
+    pub fn held(self: *Mouse, btn: u8) bool {
+        return (self.data.b & btn != 0) and (self.prev.b & btn != 0);
+    }
+
+    pub fn released(self: *Mouse, btn: u8) bool {
+        return !(self.data.b & btn != 0) and (self.prev.b & btn != 0);
+    }
+};
