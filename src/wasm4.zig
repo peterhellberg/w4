@@ -210,3 +210,29 @@ pub const Mouse = struct {
         return !(self.data.b & btn != 0) and (self.prev.b & btn != 0);
     }
 };
+
+pub const Button = struct {
+    prev: [4]u8 = .{0} ** 4,
+    data: [4]u8 = .{0} ** 4,
+
+    pub fn update(self: *Button) void {
+        self.prev = self.data;
+
+        self.data[0] = GAMEPAD1.*;
+        self.data[1] = GAMEPAD2.*;
+        self.data[2] = GAMEPAD3.*;
+        self.data[3] = GAMEPAD4.*;
+    }
+
+    pub fn pressed(self: *Button, n: u2, btn: u8) bool {
+        return (self.data[n] & btn != 0) and !(self.prev[n] & btn != 0);
+    }
+
+    pub fn held(self: *Button, n: u2, btn: u8) bool {
+        return (self.data[n] & btn != 0) and (self.prev[n] & btn != 0);
+    }
+
+    pub fn released(self: *Button, n: u2, btn: u8) bool {
+        return !(self.data[n] & btn != 0) and (self.prev[n] & btn != 0);
+    }
+};
