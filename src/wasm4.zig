@@ -104,6 +104,13 @@ pub fn pixel(x: i32, y: i32) void {
     FRAMEBUFFER[idx] = (c << shift) | (FRAMEBUFFER[idx] & ~mask);
 }
 
+/// Clear the entire screen
+pub fn clear(c: u8) void {
+    for (FRAMEBUFFER) |*x| {
+        x.* = c - 1 | (c - 1 << 2) | (c - 1 << 4) | (c - 1 << 6);
+    }
+}
+
 // ┌───────────────────────────────────────────────────────────────────────────┐
 // │                                                                           │
 // │ Sound Functions                                                           │
