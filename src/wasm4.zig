@@ -116,6 +116,11 @@ pub fn color(c: u16) void {
     DRAW_COLORS.* = c;
 }
 
+/// Set the palette to use
+pub fn palette(p: [4]u32) void {
+    PALETTE.* = p;
+}
+
 // ┌───────────────────────────────────────────────────────────────────────────┐
 // │                                                                           │
 // │ Sound Functions                                                           │
