@@ -81,6 +81,29 @@ pub extern fn vline(x: i32, y: i32, len: u32) void;
 /// Draws a horizontal line
 pub extern fn hline(x: i32, y: i32, len: u32) void;
 
+/// Draws a single pixel
+pub fn pixel(x: i32, y: i32) void {
+    if (x < 0 or x > SCREEN_SIZE or y < 0 or y > SCREEN_SIZE) {
+        return;
+    }
+
+    const ux: usize = @intCast(x);
+    const uy: usize = @intCast(y);
+    const idx: usize = (uy * 160 + ux) >> 2;
+    const sx: u3 = @intCast(x);
+    const shift = (sx & 0b11) * 2;
+    const mask = @as(u8, 0b11) << shift;
+    const palette_color: u8 = @intCast(DRAW_COLORS.* & 0b1111);
+
+    if (palette_color == 0) {
+        return;
+    }
+
+    const c = (palette_color - 1) & 0b11;
+
+    FRAMEBUFFER[idx] = (c << shift) | (FRAMEBUFFER[idx] & ~mask);
+}
+
 // ┌───────────────────────────────────────────────────────────────────────────┐
 // │                                                                           │
 // │ Sound Functions                                                           │
