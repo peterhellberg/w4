@@ -4,6 +4,9 @@ A small [Zig](https://ziglang.org/) ⚡ module, primarily meant for my own exper
 
 Based on the [wasm4.zig template](https://github.com/aduros/wasm4/blob/main/cli/assets/templates/zig/src/wasm4.zig)
 
+> [!IMPORTANT]
+> You might want to install the [w4-init](https://github.com/peterhellberg/w4-init) tool and use that instead of manually creating the files for your cart.
+
 ## Usage
 
 You can have `zig build` retrieve the `w4` module if you specify it as a dependency.
