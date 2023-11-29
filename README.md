@@ -37,7 +37,6 @@ exe.addModule("w4", b.dependency("w4", .{}).module("w4"));
 
 ### In your `src/main.zig` you should now be able to:
 ```zig
-const std = @import("std");
 const w4 = @import("w4");
 
 export fn start() void {}
@@ -45,9 +44,9 @@ export fn start() void {}
 export fn update() void {
     const hello = "Hello from Zig!";
 
-    w4.DRAW_COLORS.* = 2;
+    w4.color(2);
     w4.text(hello, 15, 11);
-    w4.DRAW_COLORS.* = 3;
+    w4.color(3);
     w4.text(hello, 16, 10);
 }
 ```
