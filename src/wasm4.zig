@@ -93,7 +93,7 @@ pub fn circle(x: i32, y: i32, r: u32) void {
 
 /// Draws a single pixel
 pub fn pixel(x: i32, y: i32) void {
-    if (x < 0 or x > SCREEN_SIZE or y < 0 or y > SCREEN_SIZE) {
+    if (x < 0 or x >= SCREEN_SIZE or y < 0 or y >= SCREEN_SIZE) {
         return;
     }
 
