@@ -1,5 +1,6 @@
 .{
-    .name = "w4",
+    .name = .w4,
+    .fingerprint = 0x13097b273c9e32,
     .version = "0.0.1",
     .paths = .{
         "src/wasm4.zig",
