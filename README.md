@@ -14,12 +14,13 @@ You can have `zig build` retrieve the `w4` module if you specify it as a depende
 ### Create a `build.zig.zon` that looks something like this:
 ```zig
 .{
-    .name = "w4-game",
+    .name = .w4_game,
+    .fingerprint = 0x9364c2ea98294635,
     .version = "0.0.0",
     .paths = .{""},
     .dependencies = .{
         .w4 = .{
-            .url = "https://github.com/peterhellberg/w4/archive/refs/tags/v0.0.2.tar.gz",
+            .url = "https://github.com/peterhellberg/w4/archive/refs/tags/v0.0.6.tar.gz",
         },
     },
 }
