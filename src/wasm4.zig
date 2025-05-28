@@ -213,11 +213,11 @@ pub const Mouse = struct {
         self.data.y = MOUSE_Y.*;
         self.data.b = MOUSE_BUTTONS.*;
 
-        if (self.data.x >= 0 and self.data.x <= SCREEN_SIZE)
-            self.x = @as(i32, @intCast(self.data.x));
+        if (self.data.x >= 0 and self.data.x < SCREEN_SIZE)
+            self.x = self.data.x;
 
-        if (self.data.y >= 0 and self.data.y <= SCREEN_SIZE)
-            self.y = @as(i32, @intCast(self.data.y));
+        if (self.data.y >= 0 and self.data.y < SCREEN_SIZE)
+            self.y = self.data.y;
     }
 
     pub fn pressed(self: *Mouse, btn: u8) bool {
