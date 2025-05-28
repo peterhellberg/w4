@@ -206,12 +206,16 @@ pub const Mouse = struct {
     data: MouseData = .{},
     prev: MouseData = .{},
 
+    mx: *const i16 = MOUSE_X,
+    my: *const i16 = MOUSE_Y,
+    mb: *const u8 = MOUSE_BUTTONS,
+
     pub fn update(self: *Mouse) void {
         self.prev = self.data;
 
-        self.data.x = MOUSE_X.*;
-        self.data.y = MOUSE_Y.*;
-        self.data.b = MOUSE_BUTTONS.*;
+        self.data.x = self.mx.*;
+        self.data.y = self.my.*;
+        self.data.b = self.mb.*;
 
         if (self.data.x >= 0 and self.data.x < SCREEN_SIZE)
             self.x = self.data.x;
@@ -236,14 +240,19 @@ pub const Mouse = struct {
 pub const Button = struct {
     prev: [4]u8 = .{0} ** 4,
     data: [4]u8 = .{0} ** 4,
+    pads: [4]*const u8 = .{
+        GAMEPAD1,
+        GAMEPAD2,
+        GAMEPAD3,
+        GAMEPAD4,
+    },
 
     pub fn update(self: *Button) void {
         self.prev = self.data;
 
-        self.data[0] = GAMEPAD1.*;
-        self.data[1] = GAMEPAD2.*;
-        self.data[2] = GAMEPAD3.*;
-        self.data[3] = GAMEPAD4.*;
+        inline for (self.pads, 0..) |gp, i| {
+            self.data[i] = gp.*;
+        }
     }
 
     pub fn pressed(self: *Button, n: u2, btn: u8) bool {
