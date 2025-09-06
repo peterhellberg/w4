@@ -365,6 +365,10 @@ pub const Box = struct {
         return .{ .pos = .xy(x, y), .dim = .wh(w, h) };
     }
 
+    pub fn eql(self: Box, other: Box) bool {
+        return self.pos.eql(other.pos) and self.dim.eql(other.dim);
+    }
+
     pub fn min(self: Box) Pos {
         return self.pos;
     }
@@ -377,6 +381,32 @@ pub const Box = struct {
         return .{
             .x = self.pos.x + @divTrunc(@as(i32, @intCast(self.dim.w)), 2),
             .y = self.pos.y + @divTrunc(@as(i32, @intCast(self.dim.h)), 2),
+        };
+    }
+
+    pub fn shrink(self: Box, amount: Dim) Box {
+        return .{
+            .pos = .{
+                .x = self.pos.x + @as(i32, @intCast(amount.w)),
+                .y = self.pos.y + @as(i32, @intCast(amount.h)),
+            },
+            .dim = .{
+                .w = self.dim.w - amount.w * 2,
+                .h = self.dim.h - amount.h * 2,
+            },
+        };
+    }
+
+    pub fn grow(self: Box, amount: Dim) Box {
+        return .{
+            .pos = .{
+                .x = self.pos.x - @as(i32, @intCast(amount.w)),
+                .y = self.pos.y - @as(i32, @intCast(amount.h)),
+            },
+            .dim = .{
+                .w = self.dim.w + amount.w * 2,
+                .h = self.dim.h + amount.h * 2,
+            },
         };
     }
 

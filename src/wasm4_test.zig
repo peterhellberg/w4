@@ -150,4 +150,9 @@ test "Box behaves as expected" {
     try expectEql(w4.Pos, b.pos, b.min());
     try expectEql(w4.Pos, b.pos, .{ .x = 2, .y = 4 });
     try expectEql(w4.Dim, b.dim, .{ .w = 6, .h = 8 });
+
+    try expectEql(w4.Box, a.shrink(.{}), .init(2, 3, 1, 2));
+    try expectEql(w4.Box, b.shrink(.{}), .init(3, 5, 4, 6));
+
+    try expectEql(w4.Box, a.grow(.{ .w = 10, .h = 5 }), .init(-9, -3, 23, 14));
 }
