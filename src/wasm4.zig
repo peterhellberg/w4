@@ -115,10 +115,11 @@ pub fn pixel(x: i32, y: i32) void {
 }
 
 /// Clear the entire screen
-pub fn clear(c: u8) void {
-    for (FRAMEBUFFER) |*x| {
-        x.* = c - 1 | (c - 1 << 2) | (c - 1 << 4) | (c - 1 << 6);
-    }
+pub fn clear(c: u16) void {
+    const p = @as(u8, @intCast((c - 1) & 0b11));
+    const k: u8 = p | (p << 2) | (p << 4) | (p << 6);
+
+    for (FRAMEBUFFER) |*x| x.* = k;
 }
 
 /// Set the color to use
