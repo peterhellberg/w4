@@ -1,6 +1,8 @@
 //
 // WASM-4: https://wasm4.org/docs
 
+const w4 = @This();
+
 // ┌───────────────────────────────────────────────────────────────────────────┐
 // │                                                                           │
 // │ Platform Constants                                                        │
@@ -235,6 +237,10 @@ pub const Mouse = struct {
     pub fn released(self: *Mouse, btn: u8) bool {
         return !(self.data.b & btn != 0) and (self.prev.b & btn != 0);
     }
+
+    pub fn pos(self: *Mouse) Pos {
+        return .{ .x = self.x, .y = self.y };
+    }
 };
 
 pub const Button = struct {
@@ -265,5 +271,128 @@ pub const Button = struct {
 
     pub fn released(self: *Button, n: u2, btn: u8) bool {
         return !(self.data[n] & btn != 0) and (self.prev[n] & btn != 0);
+    }
+};
+
+pub const Screen = struct {
+    pub const width = SCREEN_SIZE;
+    pub const height = SCREEN_SIZE;
+    pub const box = Box.init(0, 0, width, height);
+    pub const min = box.min();
+    pub const max = box.max();
+    pub const center = box.center();
+
+    pub fn set(x: i32, y: i32, c: u16) void {
+        box.set(x, y, c);
+    }
+};
+
+pub const Pos = struct {
+    x: i32 = 0,
+    y: i32 = 0,
+
+    pub fn xy(x: i32, y: i32) Pos {
+        return .{ .x = x, .y = y };
+    }
+
+    pub fn add(self: Pos, other: Pos) Pos {
+        return .{ .x = self.x + other.x, .y = self.y + other.y };
+    }
+
+    pub fn eql(self: Pos, other: Pos) bool {
+        return self.x == other.x and self.y == other.y;
+    }
+
+    pub fn mul(self: Pos, s: i32) Pos {
+        return .{ .x = self.x * s, .y = self.y * s };
+    }
+
+    pub fn dot(self: Pos, other: Pos) i32 {
+        return self.x * other.x + self.y * other.y;
+    }
+
+    pub fn sum(self: Pos) i32 {
+        return self.x + self.y;
+    }
+
+    pub fn len(self: Pos) i32 {
+        return self.x * self.x + self.y * self.y;
+    }
+
+    pub fn lerp(self: Pos, other: Pos, t: u8) Pos {
+        return .{
+            .x = self.x + @divTrunc((other.x - self.x) * @as(i32, t), 256),
+            .y = self.y + @divTrunc((other.y - self.y) * @as(i32, t), 256),
+        };
+    }
+
+    pub fn line(self: Pos, other: Pos, c: u16) void {
+        w4.color(c);
+        w4.line(self.x, self.y, other.x, other.y);
+    }
+
+    pub fn set(self: Pos, c: u16) void {
+        w4.color(c);
+        w4.pixel(self.x, self.y);
+    }
+};
+
+pub const Dim = struct {
+    w: u32 = 1,
+    h: u32 = 1,
+
+    pub fn wh(w: u32, h: u32) Dim {
+        return .{ .w = w, .h = h };
+    }
+
+    pub fn eql(self: Dim, other: Dim) bool {
+        return self.w == other.w and self.h == other.h;
+    }
+
+    pub fn pos(self: Dim) Pos {
+        return .{
+            .x = if (self.w == 0) 0 else @intCast(self.w - 1),
+            .y = if (self.h == 0) 0 else @intCast(self.h - 1),
+        };
+    }
+};
+
+pub const Box = struct {
+    pos: Pos = .{},
+    dim: Dim = .{},
+
+    pub fn init(x: i32, y: i32, w: u32, h: u32) Box {
+        return .{ .pos = .xy(x, y), .dim = .wh(w, h) };
+    }
+
+    pub fn min(self: Box) Pos {
+        return self.pos;
+    }
+
+    pub fn max(self: Box) Pos {
+        return self.pos.add(self.dim.pos());
+    }
+
+    pub fn center(self: Box) Pos {
+        return .{
+            .x = self.pos.x + @divTrunc(@as(i32, @intCast(self.dim.w)), 2),
+            .y = self.pos.y + @divTrunc(@as(i32, @intCast(self.dim.h)), 2),
+        };
+    }
+
+    pub fn fill(self: Box, c: u16) void {
+        w4.color(c);
+        w4.rect(self.pos.x, self.pos.y, self.dim.w, self.dim.h);
+    }
+
+    pub fn set(self: Box, x: i32, y: i32, c: u16) void {
+        const sx = self.pos.x + x;
+        const sy = self.pos.y + y;
+        const ma = self.max();
+
+        if (x < 0 or y < 0 or sx > ma.x or sy > ma.y) return;
+
+        w4.color(c);
+        w4.pixel(sx, sy);
     }
 };
